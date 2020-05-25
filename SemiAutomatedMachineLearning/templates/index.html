@@ -1,0 +1,138 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+
+{% if session['logged_in'] %}
+   
+	{% if data %}
+	<h3>{{data}}</h3>
+	{% else %}
+
+	<a href="/logout">Logout</a> <br> <br> 
+	<!-- <a href="{{ url_for('logout')}}" data-toggle="modal" data-target="#logoutModal">logout</a>-->
+	
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="container">
+	<div class="jumbotron">
+	   <h1 class="display-3">Simplified MLApp</h1>
+		<p>Simplify Your Machine Learning and Data Exploration(Semi-Automated ML)</p>
+		<p><a href="{{ url_for('login')}}" type="button" class="btn btn-primary" > Refresh</a></p>
+	  </div>
+	
+
+
+	<div class="container">
+		<div class="main">
+			<div class="row">
+			  <div class="col-md-8" style="background-color:#1dcaff">
+				<h2 style="color:#fff">Upload Your Dataset</h2>
+				  <p style="color:#fff">We only accept csv format numerical data</p>
+					<form method=POST enctype=multipart/form-data action="{{ url_for('dataupload') }}" class="form-group">
+					  <div class="form-group">
+
+						<input type="file" name="csv_data">
+
+						<div class="custom-select" style="width:450px;">
+						  <select class="model_type" name="model_type" required>
+											<option value="" disabled selected>Select ML TYPE</option>
+											<option value="classification" required>Classification</option>
+											<option value="regression" required>Regression</option>
+						
+										  </select>
+						</div>
+					  <br/>
+					  </div>
+					  
+					  <input type="submit"  onclick="myAnalyser()" class="btn btn-primary mb-2"> 
+					  <input type="reset"  value="Reset" class="btn btn-danger mb-2">
+					</form>
+					<br/>
+			  </div>      
+			</div>
+	  
+	</div>
+	</div>
+	</div>
+	{% endif %}
+
+{% else %}
+<h2 class="centre">Login or Register</h2>
+
+<!-- <a href="/login">Login</a> 
+<a href="/register">Register</a> -->
+<div class="container">
+	<div class="row" style="margin-top: 40px">
+		<div class="col-sm-6">
+			<ul>
+				<li class="col-sm-6"><a href="/login" class="btn form-control btn-success" >Login</a></li>
+				<li class="col-sm-6"><a href="/register" class="btn form-control btn-primary">Register</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
+<!-- Main Content Is Here -->
+ <!-- Styles for  Loading and Spinning -->
+ <style type="text/css">
+    body{
+  font:15px/1.5 Arial, Helvetica,sans-serif;
+}
+    .spinner-1:before{
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+      top:50%;
+      left: 50%;
+      height: 60px;
+      width: 60px;
+      margin-top: -30px;
+      margin-left: -30px;
+      border-radius: 50%;
+      border:6px solid transparent;
+      border-top-color: #0091EA;
+      animation: spinner 0.7s linear infinite;
+    }
+    @keyframes spinner {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    li { background-color:#BDBDBD; }
+    li:nth-child(odd) { background-color:#0091EA; }
+    </style>
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/styles.css')}}">
+{% endblock %}
+
+
+
+
+
+<!-- Main External 3-Party JS Is Here -->
+
+{% block scripts %}
+
+{{ super() }} 
+<!-- Function to Show Spinning  -->
+<script>
+function myAnalyser() {
+  document.querySelector('.main div').style.display = 'none';
+//Hide the main division
+document.querySelector('.main').classList.add('spinner-1');
+// Server request
+setTimeout(() => {
+document.querySelector('.main').classList.remove('spinner-1');
+//Remove the animation
+document.querySelector('.main div').style.display = 'block';
+//Show the main division
+},5000);//Number of seconds to last
+}
+</script>
+
+
+{% endblock%}
+
+
+
